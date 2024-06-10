@@ -6,6 +6,7 @@
 //  Copyright © 2019 Asana. All rights reserved.
 //
 
+import CoreGraphics
 import UIKit
 
 public class AngleShape:

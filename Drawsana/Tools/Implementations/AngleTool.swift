@@ -6,7 +6,7 @@
 //  Copyright © 2019 Asana. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
 
 public class AngleTool: DrawingToolForShapeWithThreePoints {
   public override var name: String { return "Angle" }

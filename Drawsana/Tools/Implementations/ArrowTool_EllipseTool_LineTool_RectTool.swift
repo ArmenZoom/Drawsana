@@ -6,7 +6,7 @@
 //  Copyright © 2018 Asana. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
 
 public class LineTool: DrawingToolForShapeWithTwoPoints {
   public override var name: String { return "Line" }

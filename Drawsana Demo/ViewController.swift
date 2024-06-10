@@ -38,15 +38,13 @@ class ViewController: UIViewController {
     return drawingView
   }()
 
-  lazy var viewFinalImageButton = UIBarButtonItem(
+  lazy var viewFinalImageButton = { return UIBarButtonItem(
     title: "View",
     style: .plain,
     target: self,
     action: #selector(ViewController.viewFinalImage(_:)))
-  lazy var deleteButton = UIBarButtonItem(
-    barButtonSystemItem: .trash,
-    target: self,
-    action: #selector(ViewController.removeSelection(_:)))
+  }()
+    
   let toolButton = UIButton(type: .custom)
   let imageView = UIImageView(image: UIImage(named: "demo"))
   let undoButton = UIButton()
@@ -192,7 +190,6 @@ class ViewController: UIViewController {
     // Better error reporting in dev
     Drawing.debugSerialization = true
 
-    navigationItem.leftBarButtonItem = deleteButton
     navigationItem.rightBarButtonItem = viewFinalImageButton
 
     // Set initial tool to whatever `toolIndex` says
@@ -262,12 +259,6 @@ class ViewController: UIViewController {
   @objc private func cycleStrokeWidth(_ sender: Any?) {
     strokeWidthIndex = (strokeWidthIndex + 1) % strokeWidths.count
     drawingView.userSettings.strokeWidth = strokeWidths[strokeWidthIndex]
-  }
-
-  @objc private func removeSelection(_ sender: Any?) {
-    if let selectedShape = drawingView.toolSettings.selectedShape {
-      drawingView.operationStack.apply(operation: RemoveShapeOperation(shape: selectedShape))
-    }
   }
 
   @objc private func reload(_ sender: Any?) {
@@ -352,6 +343,10 @@ extension ViewController: DrawsanaViewDelegate {
 
   func drawsanaView(_ drawsanaView: DrawsanaView, didEndDragWith tool: DrawingTool) {
   }
+    
+    func drawsanaView(_ drawsanaView: DrawsanaView, didDragWith tool: DrawingTool, point: CGPoint) {
+        
+    }
 }
 
 extension ViewController: SelectionToolDelegate {

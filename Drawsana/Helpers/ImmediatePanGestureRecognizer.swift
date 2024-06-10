@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UIKit.UIGestureRecognizerSubclass
 
 /**
  Replaces a tap gesture recognizer and a pan gesture recognizer with just one
@@ -25,18 +26,22 @@ import UIKit
  that class ignores the first ~20px of the touch while it figures out if you
  "really" want to pan. This is a drawing program, so that's not good.
  */
-class ImmediatePanGestureRecognizer: UIGestureRecognizer {
-  var tapThreshold: CGFloat = 10
+public class ImmediatePanGestureRecognizer: UIGestureRecognizer {
+    var tapThreshold: CGFloat = 10
+    var secondThreshold: CGFloat = 40
+
   // If gesture ends and this value is `true`, then the user's finger moved
   // more than `tapThreshold` points during the gesture, i.e. it is not a tap.
-  private(set) var hasExceededTapThreshold = false
+    public var hasExceededTapThreshold = false
+    public var hasExceededSecondThreshold = false
+    public var hadSecondTouch = false
 
-  private var startPoint: CGPoint = .zero
-  private var lastLastPoint: CGPoint = .zero
-  private var lastLastTime: CFTimeInterval = 0
-  private var lastPoint: CGPoint = .zero
-  private var lastTime: CFTimeInterval = 0
-  private var trackedTouch: UITouch?
+    private var startPoint: CGPoint = .zero
+    private var lastLastPoint: CGPoint = .zero
+    private var lastLastTime: CFTimeInterval = 0
+    private var lastPoint: CGPoint = .zero
+    private var lastTime: CFTimeInterval = 0
+    private var trackedTouch: UITouch?
 
   var velocity: CGPoint? {
     guard let view = view, let trackedTouch = trackedTouch else { return nil }
@@ -45,15 +50,16 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
     return CGPoint(x: delta.x / deltaT , y: delta.y - deltaT)
   }
 
-  override func location(in view: UIView?) -> CGPoint {
+    override public func location(in view: UIView?) -> CGPoint {
     guard let view = view else {
       return lastPoint
     }
     return view.convert(lastPoint, to: view)
   }
 
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
     guard trackedTouch == nil, let firstTouch = touches.first, let view = view else { return }
+    hadSecondTouch = touches.count > 1
     trackedTouch = firstTouch
     startPoint = firstTouch.location(in: view)
     lastPoint = startPoint
@@ -63,7 +69,7 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
     state = .began
   }
 
-  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+    override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
     guard
       state == .began || state == .changed,
       let view = view,
@@ -72,7 +78,7 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
     {
       return
     }
-
+    hadSecondTouch = hadSecondTouch || touches.count > 1
     lastLastTime = lastTime
     lastLastPoint = lastPoint
     lastTime = CFAbsoluteTimeGetCurrent()
@@ -80,11 +86,22 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
     if (lastPoint - startPoint).length >= tapThreshold {
       hasExceededTapThreshold = true
     }
+    
+    if (lastPoint - startPoint).length >= secondThreshold {
+        hasExceededSecondThreshold = true
+    }
 
     state = .changed
+        
+    if hadSecondTouch {
+        self.isEnabled = false
+        self.isEnabled = true
+    }
+        print("TOUCH \(hadSecondTouch) \(lastTime)")
+
   }
 
-  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
     guard
       state == .began || state == .changed,
       let trackedTouch = trackedTouch,
@@ -92,7 +109,7 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
     {
       return
     }
-
+    
     state = .ended
 
     DispatchQueue.main.async {
@@ -100,9 +117,12 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
     }
   }
 
-  override func reset() {
+    override public func reset() {
     super.reset()
+    
     trackedTouch = nil
     hasExceededTapThreshold = false
+    hasExceededSecondThreshold = false
+    hadSecondTouch = false
   }
 }

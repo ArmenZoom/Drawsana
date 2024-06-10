@@ -6,6 +6,7 @@
 //  Copyright © 2018 Asana. All rights reserved.
 //
 
+import CoreGraphics
 import UIKit
 
 /**
@@ -16,7 +17,7 @@ import UIKit
 public protocol Shape: AnyObject, Codable {
   /// Globally unique identifier for this shape. Meant to be used for equality
   /// checks, especially for network-based updates.
-  var id: String { get set }
+  var id: String { get }
 
   /// String value of this shape, for serialization and debugging
   static var type: String { get }
@@ -128,10 +129,8 @@ extension ShapeWithTwoPoints {
   }
     
     public var squareRect: CGRect {
-        let width = min(abs(b.x - a.x), abs(b.y - a.y))
-        let x = b.x < a.x ? a.x - width : a.x
-        let y = b.y < a.y ? a.y - width : a.y
-        return CGRect(x: x, y: y, width: width, height: width)
+        let width = max((b.x - a.x), (b.y - a.y))
+        return CGRect(x: a.x, y: a.y, width: width, height: width)
     }
     
 

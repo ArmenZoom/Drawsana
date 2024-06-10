@@ -6,6 +6,7 @@
 //  Copyright © 2018 Asana. All rights reserved.
 //
 
+import CoreGraphics
 import UIKit
 
 public protocol TextToolDelegate: AnyObject {
@@ -33,6 +34,8 @@ public protocol TextToolDelegate: AnyObject {
 }
 
 public class TextTool: NSObject, DrawingTool {
+  public var stepCount: Int = 1
+    
   /// MARK: Protocol requirements
 
   public let isProgressive = false
@@ -112,7 +115,7 @@ public class TextTool: NSObject, DrawingTool {
       self.selectedShape = newShape
       newShape.transform.translation = delegate?.textToolPointForNewText(tappedPoint: point) ?? point
       beginEditing(shape: newShape, context: context)
-      context.operationStack.apply(operation: AddShapeOperation(shape: newShape))
+        context.operationStack.apply(operation: AddShapeOperation(shape: newShape, stepCount: self.stepCount))
     }
   }
 
@@ -201,7 +204,6 @@ public class TextTool: NSObject, DrawingTool {
   private func finishEditing(context: ToolOperationContext) {
     applyEditTextOperationIfTextHasChanged(context: context)
     selectedShape?.isBeingEdited = false
-    context.toolSettings.selectedShape = nil
     context.toolSettings.interactiveView = nil
     context.toolSettings.isPersistentBufferDirty = true
   }
@@ -238,10 +240,7 @@ public class TextTool: NSObject, DrawingTool {
 
   func updateTextView() {
     guard let shape = selectedShape else { return }
-    // Resetting text while markedTextRange exists breaks some keyboards.
-    if editingView.textView.markedTextRange == nil {
-      editingView.textView.text = shape.text
-    }
+    editingView.textView.text = shape.text
     editingView.textView.font = shape.font
     editingView.textView.textColor = shape.fillColor
     editingView.bounds = shape.boundingRect
@@ -325,11 +324,7 @@ public class TextTool: NSObject, DrawingTool {
 extension TextTool: UITextViewDelegate {
   public func textViewDidChange(_ textView: UITextView) {
     guard let shape = selectedShape else { return }
-    
-    if textView.markedTextRange == nil {
-      shape.text = textView.text ?? ""
-    }
-    
+    shape.text = textView.text ?? ""
     updateShapeFrame()
     // TODO: Only update selection rect here instead of rerendering everything
     shapeUpdater?.rerenderAllShapesInefficiently()

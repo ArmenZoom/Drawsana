@@ -56,6 +56,13 @@
 		DF8C5A1C227C0CC0008C58AE /* DrawingToolForShapeWithThreePoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C5A1B227C0CC0008C58AE /* DrawingToolForShapeWithThreePoints.swift */; };
 		DF8C5A1E227C0CCA008C58AE /* AngleShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C5A1D227C0CCA008C58AE /* AngleShape.swift */; };
 		DF8C5A20227C18B0008C58AE /* AngleTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C5A1F227C18B0008C58AE /* AngleTool.swift */; };
+		EA57CFC62C16D9DC000BB133 /* MagicWandShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA57CFC42C16D9DC000BB133 /* MagicWandShape.swift */; };
+		EA57CFC72C16D9DC000BB133 /* ImageShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA57CFC52C16D9DC000BB133 /* ImageShape.swift */; };
+		EA57CFCD2C16DDFC000BB133 /* MyGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA57CFC82C16DDFC000BB133 /* MyGradientView.swift */; };
+		EA57CFCE2C16DDFC000BB133 /* UIHitPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA57CFC92C16DDFC000BB133 /* UIHitPassView.swift */; };
+		EA57CFCF2C16DDFC000BB133 /* ZoomDrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA57CFCA2C16DDFC000BB133 /* ZoomDrawViewController.swift */; };
+		EA57CFD02C16DDFC000BB133 /* ViewFrameAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA57CFCB2C16DDFC000BB133 /* ViewFrameAccessor.swift */; };
+		EA57CFD12C16DDFC000BB133 /* CutOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA57CFCC2C16DDFC000BB133 /* CutOutViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +151,13 @@
 		DF8C5A1B227C0CC0008C58AE /* DrawingToolForShapeWithThreePoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingToolForShapeWithThreePoints.swift; sourceTree = "<group>"; };
 		DF8C5A1D227C0CCA008C58AE /* AngleShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AngleShape.swift; sourceTree = "<group>"; };
 		DF8C5A1F227C18B0008C58AE /* AngleTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTool.swift; sourceTree = "<group>"; };
+		EA57CFC42C16D9DC000BB133 /* MagicWandShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicWandShape.swift; sourceTree = "<group>"; };
+		EA57CFC52C16D9DC000BB133 /* ImageShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageShape.swift; sourceTree = "<group>"; };
+		EA57CFC82C16DDFC000BB133 /* MyGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyGradientView.swift; sourceTree = "<group>"; };
+		EA57CFC92C16DDFC000BB133 /* UIHitPassView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIHitPassView.swift; sourceTree = "<group>"; };
+		EA57CFCA2C16DDFC000BB133 /* ZoomDrawViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomDrawViewController.swift; sourceTree = "<group>"; };
+		EA57CFCB2C16DDFC000BB133 /* ViewFrameAccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewFrameAccessor.swift; sourceTree = "<group>"; };
+		EA57CFCC2C16DDFC000BB133 /* CutOutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CutOutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +228,8 @@
 				D0E97E8421D0DD90007722D7 /* NgonShape.swift */,
 				376229712113AAD30034D0E3 /* LineShape.swift */,
 				376229792113AB7F0034D0E3 /* PenShape.swift */,
+				EA57CFC52C16D9DC000BB133 /* ImageShape.swift */,
+				EA57CFC42C16D9DC000BB133 /* MagicWandShape.swift */,
 				376229752113AB6E0034D0E3 /* RectShape.swift */,
 				37362D5B21151684003E5ACA /* TextShape.swift */,
 			);
@@ -327,6 +343,11 @@
 			children = (
 				37EB4EFC21064A5E00E10461 /* AppDelegate.swift */,
 				37EB4EFE21064A5E00E10461 /* ViewController.swift */,
+				EA57CFCC2C16DDFC000BB133 /* CutOutViewController.swift */,
+				EA57CFC82C16DDFC000BB133 /* MyGradientView.swift */,
+				EA57CFC92C16DDFC000BB133 /* UIHitPassView.swift */,
+				EA57CFCB2C16DDFC000BB133 /* ViewFrameAccessor.swift */,
+				EA57CFCA2C16DDFC000BB133 /* ZoomDrawViewController.swift */,
 				372093CE21345862001A906E /* ColorPickerViewController.swift */,
 				372093D021345DB7001A906E /* ToolPickerViewController.swift */,
 				37EB4F0021064A5E00E10461 /* Main.storyboard */,
@@ -497,6 +518,7 @@
 				3762298B2113D7910034D0E3 /* TextTool.swift in Sources */,
 				D0F3B43D21D34F4000701BB4 /* CGFloat+DrawsanaExtensions.swift in Sources */,
 				376229742113AAF50034D0E3 /* ShapeTransform.swift in Sources */,
+				EA57CFC72C16D9DC000BB133 /* ImageShape.swift in Sources */,
 				37885E2A210A9C69003A918F /* ArrowTool_EllipseTool_LineTool_RectTool.swift in Sources */,
 				3706B15C211BA07F00D41622 /* KeyedDecodingContainer+DrawsanaExtensions.swift in Sources */,
 				376229722113AAD30034D0E3 /* LineShape.swift in Sources */,
@@ -510,6 +532,7 @@
 				37362D6F211B7314003E5ACA /* DragHandler.swift in Sources */,
 				37EB4EF4210649FC00E10461 /* DrawsanaView.swift in Sources */,
 				37362D602118E46F003E5ACA /* DrawingOperationStack.swift in Sources */,
+				EA57CFC62C16D9DC000BB133 /* MagicWandShape.swift in Sources */,
 				3777F2FF21068A78009A9AC5 /* DrawingTool.swift in Sources */,
 				3706B15E211CF29500D41622 /* DrawingToolForShapeWithTwoPoints.swift in Sources */,
 				3777F2FD21068A5C009A9AC5 /* Shape.swift in Sources */,
@@ -534,6 +557,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				372093D121345DB7001A906E /* ToolPickerViewController.swift in Sources */,
+				EA57CFCE2C16DDFC000BB133 /* UIHitPassView.swift in Sources */,
+				EA57CFCF2C16DDFC000BB133 /* ZoomDrawViewController.swift in Sources */,
+				EA57CFD02C16DDFC000BB133 /* ViewFrameAccessor.swift in Sources */,
+				EA57CFCD2C16DDFC000BB133 /* MyGradientView.swift in Sources */,
+				EA57CFD12C16DDFC000BB133 /* CutOutViewController.swift in Sources */,
 				37EB4EFF21064A5E00E10461 /* ViewController.swift in Sources */,
 				37EB4EFD21064A5E00E10461 /* AppDelegate.swift in Sources */,
 				372093CF21345862001A906E /* ColorPickerViewController.swift in Sources */,
@@ -801,7 +829,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = K34Z59STMC;
+				DEVELOPMENT_TEAM = QVJB8C46KP;
 				INFOPLIST_FILE = "$(SRCROOT)/Drawsana Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -823,7 +851,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = K34Z59STMC;
+				DEVELOPMENT_TEAM = QVJB8C46KP;
 				INFOPLIST_FILE = "$(SRCROOT)/Drawsana Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (

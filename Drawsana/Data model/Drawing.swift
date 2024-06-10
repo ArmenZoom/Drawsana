@@ -114,6 +114,7 @@ public class Drawing: Codable {
     try multiDecoder.decode(TextShape.self)
     try multiDecoder.decode(StarShape.self)
     try multiDecoder.decode(NgonShape.self)
+    try multiDecoder.decode(ImageShape.self)
     shapeDecoder?(multiDecoder)
     container = multiDecoder.container
     return multiDecoder.results

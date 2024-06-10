@@ -16,6 +16,8 @@ public protocol SelectionToolDelegate: AnyObject {
 }
 
 public class SelectionTool: DrawingTool {
+  public var stepCount: Int = 1
+    
   public let name = "Selection"
   
   public var isProgressive: Bool { return false }

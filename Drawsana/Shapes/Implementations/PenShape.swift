@@ -6,6 +6,7 @@
 //  Copyright © 2018 Asana. All rights reserved.
 //
 
+import CoreGraphics
 import UIKit
 
 public struct PenLineSegment: Codable, Equatable {
@@ -13,20 +14,14 @@ public struct PenLineSegment: Codable, Equatable {
   public var b: CGPoint
   public var width: CGFloat
 
-  public init(a: CGPoint, b: CGPoint, width: CGFloat) {
-    self.a = a
-    self.b = b
-    self.width = width
-  }
-
   public var midPoint: CGPoint {
     return CGPoint(x: (a.x + b.x) / 2, y: (a.y + b.y) / 2)
   }
 }
 
-public class PenShape: Shape, ShapeWithStrokeState, ShapeSelectable {
+public class PenShape: Shape, ShapeWithStrokeState {
   private enum CodingKeys: String, CodingKey {
-    case id, isFinished, strokeColor, start, strokeWidth, segments, isEraser, type, transform
+    case id, isFinished, strokeColor, start, strokeWidth, segments, isEraser, type
   }
 
   public static let type: String = "Pen"
@@ -38,24 +33,8 @@ public class PenShape: Shape, ShapeWithStrokeState, ShapeSelectable {
   public var strokeWidth: CGFloat = 10
   public var segments: [PenLineSegment] = []
   public var isEraser: Bool = false
-  public var transform: ShapeTransform = .identity
 
-  public var boundingRect: CGRect {
-    var minX = start.x, maxX = start.x
-    var minY = start.y, maxY = start.y
     
-    for segment in segments {
-      let x = segment.b.x
-      let y = segment.b.y
-      if x < minX { minX = x }
-      if x > maxX { maxX = x }
-      if y < minY { minY = y }
-      if y > maxY { maxY = y }
-    }
-    let minimalRect = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
-    return minimalRect.insetBy(dx: -strokeWidth/2, dy: -strokeWidth/2)
-  }
-
   public init() {
   }
 
@@ -74,7 +53,6 @@ public class PenShape: Shape, ShapeWithStrokeState, ShapeSelectable {
     strokeWidth = try values.decode(CGFloat.self, forKey: .strokeWidth)
     segments = try values.decode([PenLineSegment].self, forKey: .segments)
     isEraser = try values.decode(Bool.self, forKey: .isEraser)
-    transform = try values.decodeIfPresent(ShapeTransform.self, forKey: .transform) ?? .identity
   }
 
   public func encode(to encoder: Encoder) throws {
@@ -87,17 +65,17 @@ public class PenShape: Shape, ShapeWithStrokeState, ShapeSelectable {
     try container.encode(strokeWidth, forKey: .strokeWidth)
     try container.encode(segments, forKey: .segments)
     try container.encode(isEraser, forKey: .isEraser)
-    if !transform.isIdentity {
-      try container.encode(transform, forKey: .transform)
-    }
+  }
+
+  public func hitTest(point: CGPoint) -> Bool {
+    return false
   }
 
   public func add(segment: PenLineSegment) {
     segments.append(segment)
   }
 
-  private func render(in context: CGContext, onlyLast: Bool = false) {
-    transform.begin(context: context)
+  public func render(in context: CGContext, onlyLast: Bool = false) {
     context.saveGState()
     if isEraser {
       context.setBlendMode(.clear)
@@ -161,7 +139,6 @@ public class PenShape: Shape, ShapeWithStrokeState, ShapeSelectable {
       context.strokePath()
     }
     context.restoreGState()
-    transform.end(context: context)
   }
 
   public func render(in context: CGContext) {
@@ -171,4 +148,100 @@ public class PenShape: Shape, ShapeWithStrokeState, ShapeSelectable {
   public func renderLatestSegment(in context: CGContext) {
     render(in: context, onlyLast: true)
   }
+}
+
+public class LassoShape: Shape, ShapeWithStrokeState {
+    private enum CodingKeys: String, CodingKey {
+        case id, isFinished, strokeColor, start, end, strokeWidth, segments, isEraser, type
+    }
+    
+    public static let type: String = "Pen"
+    
+    public var id: String = UUID().uuidString
+    public var isFinished = true
+    public var start: CGPoint = .zero
+    public var end: CGPoint = .zero
+    public var strokeColor: UIColor = .black
+    public var strokeWidth: CGFloat = 10
+    public var segments: [PenLineSegment] = []
+    public var isEraser: Bool = false
+    
+    
+    public init() {
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let type = try values.decode(String.self, forKey: .type)
+        if type != PenShape.type {
+            throw DrawsanaDecodingError.wrongShapeTypeError
+        }
+        
+        id = try values.decode(String.self, forKey: .id)
+        isFinished = try values.decode(Bool.self, forKey: .isFinished)
+        start = try values.decode(CGPoint.self, forKey: .start)
+        end = try values.decode(CGPoint.self, forKey: .end)
+        strokeColor = UIColor(hexString: try values.decode(String.self, forKey: .strokeColor))
+        strokeWidth = try values.decode(CGFloat.self, forKey: .strokeWidth)
+        segments = try values.decode([PenLineSegment].self, forKey: .segments)
+        isEraser = try values.decode(Bool.self, forKey: .isEraser)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(PenShape.type, forKey: .type)
+        try container.encode(id, forKey: .id)
+        try container.encode(isFinished, forKey: .isFinished)
+        try container.encode(start, forKey: .start)
+        try container.encode(end, forKey: .end)
+        try container.encode(strokeColor.hexString, forKey: .strokeColor)
+        try container.encode(strokeWidth, forKey: .strokeWidth)
+        try container.encode(segments, forKey: .segments)
+        try container.encode(isEraser, forKey: .isEraser)
+    }
+    
+    public func hitTest(point: CGPoint) -> Bool {
+        return false
+    }
+    
+    public func add(segment: PenLineSegment) {
+        segments.append(segment)
+    }
+    
+    public func render(in context: CGContext, onlyLast: Bool = false) {
+        context.saveGState()
+        if isEraser {
+            context.setBlendMode(.clear)
+        }
+        guard !segments.isEmpty else {
+            context.restoreGState()
+            return
+        }
+        context.setLineCap(.round)
+        context.setLineJoin(.round)
+        context.setStrokeColor(strokeColor.cgColor)
+        context.setLineWidth(1)
+        context.setLineDash(phase: 0, lengths: [10.0, 4.0])
+        context.setFillColor(strokeColor.cgColor)
+
+        context.move(to: start)
+        
+        let points = segments.map { $0.midPoint }
+
+        context.addLines(between: points)
+        if isFinished {
+            context.fillPath()
+        }
+        context.strokePath()
+        context.restoreGState()
+    }
+    
+    public func render(in context: CGContext) {
+        render(in: context, onlyLast: false)
+    }
+    
+    public func renderLatestSegment(in context: CGContext) {
+        render(in: context, onlyLast: true)
+    }
 }
